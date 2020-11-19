@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="text-center">Dependent Dropdown</h2>
+    <br>
+    <br>
+
+    <form method="post" id="indexForm" data-courses-url="{% url 'ajax_load_courses' %}">
+        {% csrf_token %}
+        <label>Programmign</label>
+
+        <select name="programming" id="programming" class="form-control">
+            <option value="">-- Select Programming --</option>
+            {% for i in program %}
+                <option value="{{ i.id }}">{{ i.name }}</option>
+            {% endfor %}
+
+        </select>
+
+        <br>
+        <br>
+
+    <label>Courses</label>
+    <select name="courses" id="courses" class="form-control">
+
+
+    </select>
+
+    <br>
+    <input type="submit" value="Submit" class="form-control btn btn-primary">
+
+    </form>
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script>
+
+    $("#programming").change(function (){
+        var url = $("#indexForm").attr('data-courses-url');
+        var programming_id = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'programming': programming_id,
+            },
+            success: function (data) {
+                $("#courses").html(data);
+            }
+        });
+    });
+
+
+
+    </script>
+
+{% endblock %}
